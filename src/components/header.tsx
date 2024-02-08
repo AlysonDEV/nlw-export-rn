@@ -22,7 +22,7 @@ export function Header({title, cardQuantityItems = 0}: HeaderProps){
       {cardQuantityItems > 0 &&
         <TouchableOpacity className="relative" activeOpacity={0.7}>
         <View 
-          className="bg-lime-400 w-4 h-4 rounded-full items-center justify-center absolute z-10 -right-1.5 -top-1"
+          className="bg-lime-400 w-4 h-4 rounded-full items-center justify-center absolute z-10 -right-1.5 -top-1.5"
         >
           <Text className="text-slate-900 font-bold text-xs">{cardQuantityItems}</Text>
         </View>
