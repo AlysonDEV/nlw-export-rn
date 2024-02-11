@@ -68,7 +68,7 @@ npx expo start
       <a href="#">
         <img src="https://avatars.githubusercontent.com/AlysonDev" width="100px;" alt="Alyson Ronnan Martins Picture"/><br>
         <sub>
-          <b>Suami Rocha</b>
+          <b>Alyson Ronnan Martins</b>
         </sub>
       </a>
     </td>
