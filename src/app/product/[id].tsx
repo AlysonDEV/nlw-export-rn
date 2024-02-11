@@ -1,5 +1,5 @@
-import { Image, Text, View } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { Image, ScrollView, Text, View } from "react-native";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 
 import { PRODUCTS } from "@/utils/data/products";
@@ -7,16 +7,26 @@ import { formatCurrency } from "@/utils/functions/format-currency";
 import { Button } from "@/components/button";
 import { LinkButton } from "@/components/link-button";
 
+import { useCartStore } from "@/stores/cart-store";
+
 
 export default function Product() {
+  const cartStore = useCartStore()
+  const navegation = useNavigation()
   const {id} = useLocalSearchParams()
 
   const product = PRODUCTS.filter((item) => item.id === id)[0]
 
+
+  function handleAddToCart() {
+    cartStore.add(product)
+    navegation.goBack()
+  }
+
   return (
-    <View className="flex-1">
+    <View className="flex-1" >
       <Image source={product.cover} className="w-full h-52" resizeMode="cover" />
-      <View className="p-5 mt-8 flex-1">
+      <ScrollView className="p-5 mt-8 flex-1 pb-3" contentContainerStyle={{paddingBottom:50}}>
         <Text className="text-lime-400 text-2xl font-heading my-2">
           {formatCurrency(product.price)}
         </Text>
@@ -31,15 +41,15 @@ export default function Product() {
           </Text>
         ))}
 
-      </View>
+      </ScrollView>
 
       <View className="p-5 pb-8 gap-5">
-        <Button>
+        <Button onPress={handleAddToCart}>
           <Button.Icon>
             <Feather name="plus-circle" size={20} />
           </Button.Icon>
 
-          <Button.Text>Adcionar ao pedido</Button.Text>
+          <Button.Text >Adcionar ao pedido</Button.Text>
         </Button>
 
         <LinkButton title="Voltar ao cardápio" href="/" />

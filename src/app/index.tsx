@@ -1,16 +1,21 @@
 import { useState, useRef } from "react"
 import { FlatList, View, SectionList, Text } from "react-native"
+import { Link } from "expo-router"
+
+import { useCartStore } from "@/stores/cart-store"
 
 import { Header } from "@/components/header"
 import { CategoryButton } from "@/components/category-button"
 import { CATEGORIES, MENU } from "@/utils/data/products"
 import { Product } from "@/components/product"
-import { Link } from "expo-router"
 
 export default function Home() {
+  const cartStore = useCartStore()
   const [selectedCategory, setSelectedCategory] = useState(CATEGORIES[0])
 
   const sectionListRef = useRef<SectionList>(null)
+
+  const cartQuantityItems = cartStore.products.reduce((amount, product) => amount + product.quantity, 0)
 
   function handleCategorySelect (newSeletedCategory: string) {
     setSelectedCategory(newSeletedCategory)
@@ -20,7 +25,7 @@ export default function Home() {
     if(sectionListRef.current) {
       sectionListRef.current.scrollToLocation({
         animated: true,
-        sectionIndex: sectionIndex,
+        sectionIndex,
         itemIndex: 0
       })
     }
@@ -28,7 +33,7 @@ export default function Home() {
   }
   return (
     <View className="flex-1 pt-8">
-      <Header title="Faça seu pedido" cardQuantityItems={0} />
+      <Header title="Faça seu pedido" cardQuantityItems={cartQuantityItems} />
       
       <FlatList 
         data={CATEGORIES} 
