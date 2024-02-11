@@ -12,10 +12,12 @@ import { Feather } from "@expo/vector-icons";
 import { LinkButton } from "@/components/link-button";
 import { ProductProps } from "@/utils/data/products";
 import { useState } from "react";
+import { useNavigation } from "expo-router";
 
 export default function Cart() {
-  const  [address, setAddress] = useState("")
+  const [address, setAddress] = useState("");
   const cartStore = useCartStore();
+  const navigation = useNavigation();
 
   const total = formatCurrency(
     cartStore.products.reduce(
@@ -42,22 +44,25 @@ export default function Cart() {
 
   function handleOrder() {
     if (address.trim().length === 0) {
-      return Alert.alert("Pedido", "Informe os dados da entrega")
+      return Alert.alert("Pedido", "Informe os dados da entrega");
     }
 
-    const products = cartStore.products.map((product)=> `\n ${product.quantity} ${product.title}` ).join("")
+    const products = cartStore.products
+      .map((product) => `\n ${product.quantity} ${product.title}`)
+      .join("");
 
-    const message =
-    `\n🍔 NOVO PEDIDO
+    const message = `\n🍔 NOVO PEDIDO
     \n Entregar em: ${address}
 
     ${products}
 
     \n Valor total: ${total}
-    `
+    `;
 
-    console.log(message)
+    console.log(message);
 
+    cartStore.clear();
+    navigation.goBack();
   }
 
   return (
@@ -89,7 +94,13 @@ export default function Cart() {
               </Text>
             </View>
 
-            <Input onChangeText={setAddress} placeholder="Informe o endereço de entrega com rua, bairro, CEP, numero e complemento..." />
+            <Input
+              onChangeText={setAddress}
+              blurOnSubmit={true}
+              onSubmitEditing={handleOrder}
+              returnKeyType="next"
+              placeholder="Informe o endereço de entrega com rua, bairro, CEP, numero e complemento..."
+            />
           </View>
         </ScrollView>
       </KeyboardAwareScrollView>
