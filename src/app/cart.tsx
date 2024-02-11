@@ -1,4 +1,4 @@
-import { ScrollView, Text, View } from "react-native";
+import { Alert, ScrollView, Text, View } from "react-native";
 
 import { useCartStore } from "@/stores/cart-store";
 
@@ -10,6 +10,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { Button } from "@/components/button";
 import { Feather } from "@expo/vector-icons";
 import { LinkButton } from "@/components/link-button";
+import { ProductProps } from "@/utils/data/products";
 
 export default function Cart() {
   const cartStore = useCartStore();
@@ -21,6 +22,22 @@ export default function Cart() {
     )
   );
 
+  function handleProductRemove(product: ProductProps) {
+    Alert.alert(
+      "Remover",
+      `Deseja remover o(a) ${product.title} do carrinho?`,
+      [
+        {
+          text: "Cancelar",
+        },
+        {
+          text: "Remover",
+          onPress: () => cartStore.remove(product.id),
+        },
+      ]
+    );
+  }
+
   return (
     <View className="flex-1 pt-8">
       <Header title="Seu carrinho" />
@@ -30,7 +47,11 @@ export default function Cart() {
             {cartStore.products.length > 0 ? (
               <View className="border-b border-slate-700 ">
                 {cartStore.products.map((product) => (
-                  <Product key={product.id} data={product} />
+                  <Product
+                    key={product.id}
+                    data={product}
+                    onPress={() => handleProductRemove(product)}
+                  />
                 ))}
               </View>
             ) : (
@@ -54,11 +75,12 @@ export default function Cart() {
       <View className="p-5 gap-5">
         <Button>
           <Button.Text>Enviar pedido</Button.Text>
-          <Button.Icon><Feather name="arrow-right-circle" size={20}/></Button.Icon>
+          <Button.Icon>
+            <Feather name="arrow-right-circle" size={20} />
+          </Button.Icon>
         </Button>
 
         <LinkButton title="Voltar ao cardápio" href="/" />
-
       </View>
     </View>
   );
