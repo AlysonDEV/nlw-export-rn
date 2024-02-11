@@ -1,18 +1,21 @@
-import { Alert, ScrollView, Text, View } from "react-native";
+import { useState } from "react";
+import { useNavigation } from "expo-router";
+import { Alert, Linking, ScrollView, Text, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Feather } from "@expo/vector-icons";
 
 import { useCartStore } from "@/stores/cart-store";
 
 import { Header } from "@/components/header";
 import { Product } from "@/components/product";
-import { formatCurrency } from "@/utils/functions/format-currency";
 import { Input } from "@/components/input";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Button } from "@/components/button";
-import { Feather } from "@expo/vector-icons";
 import { LinkButton } from "@/components/link-button";
 import { ProductProps } from "@/utils/data/products";
-import { useState } from "react";
-import { useNavigation } from "expo-router";
+import { formatCurrency } from "@/utils/functions/format-currency";
+
+const PHONE_NUMBER = "5585992188113"
+
 
 export default function Cart() {
   const [address, setAddress] = useState("");
@@ -59,7 +62,7 @@ export default function Cart() {
     \n Valor total: ${total}
     `;
 
-    console.log(message);
+    Linking.openURL(`http://api.whatsapp.com/send?phone=${PHONE_NUMBER}&text=${message}`)
 
     cartStore.clear();
     navigation.goBack();
